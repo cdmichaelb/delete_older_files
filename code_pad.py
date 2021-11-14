@@ -1,6 +1,7 @@
     """Code I'm saving for later.
     """
 import ctypes
+import sys
 
 def get_is_admin():
     """Get the UAC level.
