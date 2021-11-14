@@ -45,15 +45,15 @@ def do_delete(dir_name, age, recursion=None):
         # print(f'{dir_name} has {len(file_names)} files and {len(dir_names)} directories.')
         # Delete the files.
         for each_directory in dir_names:
-            print("Deleting files in " + each_directory + "...")
+            #print("Deleting files in " + each_directory + "...")
             for each_file in os.listdir(each_directory):
                 if (
                     os.path.getmtime(each_directory + "/" + each_file)
                     < current_time - age * 86400
                 ):
-                    print(
-                        f"Deleting file: {each_file} in {each_directory} because {os.path.getmtime(each_directory + '/' + each_file)} is older than {current_time - age * 8640} days."
-                    )
+                    #print(
+                    #    f"Deleting file: {each_file} in {each_directory} because {os.path.getmtime(each_directory + '/' + each_file)} is older than {current_time - age * 8640} days."
+                    #)
                     os.chmod(each_directory + "/" + each_file, 0o777)
                     os.remove(each_directory + "/" + each_file)
 
