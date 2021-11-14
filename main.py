@@ -41,5 +41,20 @@ def main():
         file_time = os.path.getmtime(file_path)
         if (current_time - file_time) > age:
             os.remove(file_path)
-            
-# set_admin() don't run this.
+    
+    
+
+
+if get_is_admin() == True:
+    main()
+else:
+    do_you_want_to_be_admin = input("Do you want to be admin? (y/n) ")
+    if do_you_want_to_be_admin == "y":
+        set_admin()
+    else:
+        print("You are not admin.")
+
+
+
+# wait 10 seconds
+time.sleep(10)
