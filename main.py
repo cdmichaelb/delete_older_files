@@ -66,7 +66,7 @@ def do_delete(dir_name, age, recursion=None):
     except FileNotFoundError:
         print("The directory or file does not exist.")
     except RecursionError:
-        print("Maximum depth exceeded.")
+        #print("Maximum depth exceeded.") -- We don't need to know this. It's handled.
         if each_directory == "None":
             return True, None
         else:
