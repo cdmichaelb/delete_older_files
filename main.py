@@ -25,6 +25,7 @@ def main():
 def do_delete(dir_name, age, recursion=None):
     try:
         each_directory = False
+        each_file = False
         # Get the current time.
         current_time = time.time()
         # current_time = os.path.getmtime(dir_name)
@@ -62,22 +63,50 @@ def do_delete(dir_name, age, recursion=None):
                 os.chmod(each_directory, 0o777)
                 dir_names.remove(each_directory)
                 print(f"Deleting directory: {each_directory}.")
+        else:
+            file_names = [
+                dir_name + "/" + file_name
+                for file_name in file_names
+                if not os.path.isdir(dir_name + "/" + file_name)
+            ]
+            for each_file in file_names:
+                if (
+                    os.path.getmtime(each_file) < current_time - age * 86400
+                ):
+                    #print(
+                    #    f"Deleting file: {each_file} because {os.path.getmtime(each_file)} is older than {current_time - age * 8640} days."
+                    #)
+                    os.chmod(each_file, 0o777)
+                    os.remove(each_file)
+            # If directory is empty, delete it.            
+            if os.rmdir(dir_name):
+                os.chmod(dir_name, 0o777)
+                print(f"Deleting directory: {dir_name}.")
+            else:
+                print(f"Directory: {dir_name} is not empty.")
+            
         do_delete(dir_name, age)
     except FileNotFoundError:
         print("The directory or file does not exist.")
     except RecursionError:
-        #print("Maximum depth exceeded.") -- We don't need to know this. It's handled.
-        if each_directory == "None":
+        #print("Maximum depth exceeded.") #-- We don't need to know this. It's handled.
+        #print(each_directory)
+        if each_directory == False:
             return True, None
         else:
             return True, each_directory
     except os.error:
-        print(f"Access denied. {each_file} {each_directory}")
+        if each_file:
+            print(f"Access denied. {each_file}, trying again.")
         if each_directory:
             do_delete(each_directory, age)
     except UnboundLocalError as e:
         print("Unbound Local Error", e)
         quit()
+    except PermissionError as e:
+        print("Permission Error", e)
+        if each_directory:
+            do_delete(each_directory, age)
     except Exception as e:
         print(e)
         if each_directory:
